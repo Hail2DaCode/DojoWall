@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <title>The Wall</title>
+</head>
+<body>
+    <div class="container">
+        <div class="col d-flex justify-content-between">
+            <h5>Coding Dojo Wall</h5>
+            <p>Welcome {{user.first_name}}</p>
+            <a href = '/clear'>log out</a>
+        </div>
+        <hr>
+        <div class="col">
+            <form action = '/create/post' method="post">
+                <label for="post" class="form-label">What's on your mind? Create a new post:</label>
+                <textarea id = 'post' name="post" class="form-control"></textarea>
+                <button type = "submit" class="btn btn-primary my-3">Publish</button>
+            </form>
+        </div>
+        <hr>
+        <h2>All Community Posts</h2>
+        <div class="col">
+            {% for post in posts %}
+            <h3>{{post.creator.first_name}}-{{post.created_at}}</h3>
+            <p>{{post.content}}</p>
+            {% if post.creator.id == user.id%}
+            <a href="/delete/post/{{post.id}}">Delete</a>{% endif %}
+            <div class="col mx-5">
+                {% for comment in post.comments %}
+                <p class="fs-2 text-success">{{comment.maker.first_name}}</p>
+                <p>{{comment.comment}}</p>
+                {% endfor %}
+                <form action = '/create/comment' method = 'post'>
+                    <input type = "hidden" name = "post_id" value = {{post.id}}>
+                    <label for ='comment' class="form-label">post a comment</label>
+                    <textarea id = 'comment' name = 'comment' class="form-control"></textarea>
+                    <button type="submit" class="btn btn-success my-3">Comment</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</body>
+</html>
